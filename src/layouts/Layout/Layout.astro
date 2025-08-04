@@ -17,8 +17,8 @@ import SakuraEffect from "@/components/SakuraEffect.astro";
 // 导入新的目录管理器
 import TocManager from "@/components/TocManager.astro";
 
-// 1. 导入音乐播放器组件
-import MusicPlayer from "@/components/MusicPlayer.astro";
+// 1. 导入新的音乐胶囊组件
+import MusicCapsule from "@/components/MusicCapsule.astro";
 
 // 引入样式
 import "@/styles/Reset.less";
@@ -48,7 +48,6 @@ import "./Layout.less";
 				<section class="main-inner-content">
 					<slot />
 				</section>
-                {/* 关键：Aside 组件不再需要任何 props */}
 				<Aside />
 			</section>
 			<BackTop />
@@ -56,13 +55,11 @@ import "./Layout.less";
 		<Footer />
 		<SakuraEffect />
 		
-		{/* 关键：在页面底部添加目录管理器 */}
 		<TocManager />
 
-        {/* 2. 在 body 结束前添加音乐播放器组件 */}
-        <MusicPlayer />
+		{/* 2. 在 body 结束前添加音乐胶囊组件 */}
+		<MusicCapsule />
 
-		{/* --- 恢复了你原来的脚本 --- */}
 		<script>
 			import InitFn from "@/scripts/Init";
 			InitFn();
