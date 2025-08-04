@@ -1,135 +1,299 @@
 ---
-// src/components/MusicPlayer.astro
-// 【最终方案】
-// 我们现在直接从你网站的 public 目录加载本地音乐文件。
-// 这是最稳定、最可靠的方法，不会有任何网络或权限问题。
+// src/components/MusicCapsule.astro (MetingJS Version)
+// The music configuration is now handled directly by the <meting-js> tag.
+// You can change the playlist by modifying its attributes.
 ---
 
-<!-- 1. 引入 APlayer 的 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<!-- 
+  This component creates a floating music player capsule.
+  It now uses MetingJS to fetch playlists dynamically from music platforms
+  and APlayer.js for the audio functionality.
+-->
 
-<!-- 2. APlayer 播放器的挂载点 -->
-<div id="aplayer"></div>
+<!-- Step 1: Add required CDNs. APlayer CSS and MetingJS library. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
 
-<!-- 3. 引入 APlayer 的 JS -->
-<script is:inline src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- Step 2: Define the HTML structure for the music capsule -->
+<div id="music-capsule" class="music-capsule">
+  <!-- The MetingJS component will render the APlayer instance here -->
+  <div class="music-player-container">
+    <!-- 
+      METING-JS CONFIGURATION:
+      - server: Music platform ('netease', 'tencent', 'kugou', 'kuwo', 'xiami')
+      - type: Type of media ('song', 'playlist', 'album', 'search', 'artist')
+      - id: The ID of the song, playlist, album, etc.
+      - All other attributes are passed to APlayer.
+      - Example below uses a NetEase Music (网易云音乐) playlist.
+    -->
+    <meting-js
+      server="netease"
+      type="playlist"
+      id="2829883282" 
+      fixed="false"
+      mini="false"
+      autoplay="false"
+      theme="#667eea"
+      loop="all"
+      order="list"
+      preload="auto"
+      volume="0.7"
+      list-folded="true"
+      list-max-height="220px"
+    >
+    </meting-js>
+  </div>
 
-<!-- 4. 初始化 APlayer -->
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', function () {
-    const ap = new APlayer({
-      container: document.getElementById('aplayer'),
-      fixed: true,
-      mini: true,
-      theme: '#2980b9',
-      audio: [
-        {
-          name: '爱在西元前', // 改成你的歌曲名
-          artist: '周杰伦', // 改成歌手名
-          url: '/music/爱在西元前 - 周杰伦.mp3', // 【重要】对应 public/music/song1.mp3
-          cover: 'https://iili.io/F4lPWkG.jpg', // 【重要】对应 public/music/cover1.jpg
-        },
-        {
-          name: '曹操',
-          artist: '林俊杰',
-          url: '/music/曹操 - 林俊杰.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4Vqd57.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '卜卦(pay姐版1.1x)',
-          artist: 'pay姐（黏苞米糊糊）',
-          url: '/music/卜卦(pay姐版1.1x) - pay姐（黏苞米糊糊）.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4VuGkv.webp', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '东风破',
-          artist: '周杰伦',
-          url: '/music/东风破 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4sDn2I.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '句号',
-          artist: 'G.E.M.邓紫棋',
-          url: '/music/句号 - G.E.M.邓紫棋.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4L2N3b.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '搁浅',
-          artist: '周杰伦',
-          url: '/music/搁浅 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4sDQyX.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '红尘客栈',
-          artist: '周杰伦',
-          url: '/music/红尘客栈 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4L9Isa.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '美人鱼',
-          artist: '周杰伦',
-          url: '/music/美人鱼 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4sp5CJ.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '花海',
-          artist: '周杰伦',
-          url: '/music/花海 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4L29Yx.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '稻香',
-          artist: '周杰伦',
-          url: '/music/稻香 - 周杰伦.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4Ld0zP.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '最佳损友',
-          artist: '陈奕迅',
-          url: '/music/最佳损友 - 陈奕迅.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4LBbt4.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '真的爱你',
-          artist: 'Beyond',
-          url: '/music/真的爱你 - Beyond.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F4Lqcmv.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '弱水三千 (0.8x DJ苏熠鸣)',
-          artist: '苏熠鸣',
-          url: '/music/弱水三千 (0.8x DJ苏熠鸣) - 苏熠鸣.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F62l9oP.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '如愿',
-          artist: '王菲',
-          url: '/music/如愿 - 王菲.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F62YCD7.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '身骑白马',
-          artist: '徐佳莹',
-          url: '/music/身骑白马 - 徐佳莹.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F62AUut.jpg', // 【重要】对应 public/music/cover2.png
-        },
-        {
-          name: '青花',
-          artist: '周传雄',
-          url: '/music/青花 - 周传雄.mp3', // 【重要】对应 public/music/song2.mp3
-          cover: 'https://iili.io/F62I03N.jpg', // 【重要】对应 public/music/cover2.png
-        }
-        // 你可以按这个格式添加更多歌曲
-      ]
-    });
-  });
-</script>
+  <!-- The button to toggle the player's visibility -->
+  <div class="music-toggle-btn" id="music-toggle" title="切换音乐播放器">
+    <svg class="music-icon" viewBox="0 0 24 24" width="24" height="24">
+      <path fill="currentColor" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55a4 4 0 1 0 4 4V7h4V3h-6Z"/>
+    </svg>
+  </div>
+</div>
 
-<style is:global>
-  .aplayer.aplayer-fixed {
-    position: fixed !important;
-    left: 15px !important;
-    bottom: 15px !important;
-    z-index: 2147483647 !important;
+<!-- Step 3: Define the component's styles (largely unchanged) -->
+<style>
+  .music-capsule {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Responsive design for smaller screens */
+  @media (max-width: 768px) {
+    .music-capsule {
+      bottom: 80px; /* Provides space for mobile bottom nav bars */
+      left: 15px;
+    }
+  }
+
+  .music-toggle-btn {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  .music-toggle-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  }
+
+  .music-toggle-btn:active {
+    transform: translateY(0);
+  }
+
+  .music-icon {
+    color: white;
+    transition: all 0.4s ease-in-out;
+  }
+
+  .music-player-container {
+    margin-bottom: 15px;
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    min-width: 300px;
+  }
+  
+  @media (max-width: 480px) {
+      .music-player-container {
+          min-width: calc(100vw - 30px);
+      }
+  }
+
+  /* Styles for when the player is expanded */
+  .music-capsule.expanded .music-player-container {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .music-capsule.expanded .music-toggle-btn {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  }
+  
+  .music-capsule.expanded .music-icon {
+      transform: rotate(180deg);
+  }
+
+  /* Pulse animation when music is playing */
+  @keyframes musicPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .music-capsule.playing .music-toggle-btn {
+    animation: musicPulse 2s ease-in-out infinite;
+  }
+
+  /* APlayer Customizations (applied via :global since MetingJS creates them) */
+  :global(.aplayer) {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    background: rgba(255, 255, 255, 0.85) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(10px) !important;
+    margin: 0 !important;
+  }
+
+  :global(.aplayer-body) {
+    background: transparent !important;
+  }
+  
+  :global(.aplayer-pic) {
+    border-radius: 8px !important;
+    overflow: hidden !important;
+  }
+
+  :global(.aplayer-info) {
+    border-left: none !important;
+    padding-left: 15px !important;
+  }
+
+  :global(.aplayer-title) {
+    font-weight: 600 !important;
+    color: #333 !important;
+  }
+
+  :global(.aplayer-author) {
+    color: #666 !important;
+  }
+
+  :global(.aplayer-bar-wrap .aplayer-bar .aplayer-played) {
+    background: linear-gradient(90deg, #667eea, #764ba2) !important;
+  }
+  
+  :global(.aplayer-volume-bar-wrap .aplayer-volume-bar .aplayer-volume) {
+      background: linear-gradient(90deg, #667eea, #764ba2) !important;
+  }
+
+  :global(.aplayer-list) {
+    background: rgba(255, 255, 255, 0.85) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    backdrop-filter: blur(20px) !important;
+    max-height: 220px !important;
+    overflow-y: auto !important;
+  }
+
+  :global(.aplayer-list-item) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  }
+  
+  :global(.aplayer-list-item:hover) {
+      background: rgba(102, 126, 234, 0.1) !important;
+  }
+  
+  :global(.aplayer-list-item.aplayer-list-light) {
+      background: rgba(102, 126, 234, 0.15) !important;
+  }
+
+  /* Dark Theme Styles */
+  @media (prefers-color-scheme: dark) {
+    :global(.aplayer) {
+      background: rgba(30, 30, 30, 0.85) !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    :global(.aplayer-title) { color: #eee !important; }
+    :global(.aplayer-author) { color: #bbb !important; }
+    :global(.aplayer-time) { color: #bbb !important; }
+    
+    :global(.aplayer-list) {
+        background: rgba(30, 30, 30, 0.9) !important;
+    }
+    
+    :global(.aplayer-list-item) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    :global(.aplayer-list-item:hover) {
+        background: rgba(102, 126, 234, 0.2) !important;
+    }
+    
+    :global(.aplayer-list-item.aplayer-list-light) {
+        background: rgba(102, 126, 234, 0.3) !important;
+    }
   }
 </style>
+
+<!-- Step 4: Add the client-side script to control the UI -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const musicCapsule = document.getElementById('music-capsule');
+    const toggleBtn = document.getElementById('music-toggle');
+    
+    if (!musicCapsule || !toggleBtn) {
+        console.error("Music capsule elements not found.");
+        return;
+    }
+
+    // --- Event Listener for UI ---
+    // 1. Toggle player visibility
+    toggleBtn.addEventListener('click', () => {
+      musicCapsule.classList.toggle('expanded');
+    });
+
+    // --- Logic to hook into the MetingJS-generated APlayer instance ---
+    let ap; // To store the APlayer instance
+    
+    // This function waits for MetingJS to initialize APlayer
+    const hookIntoAPlayer = () => {
+      // MetingJS creates an .aplayer element, we find it
+      const aplayerElement = musicCapsule.querySelector('.aplayer');
+      
+      // If the element exists and it has an APlayer instance attached
+      if (aplayerElement && aplayerElement.APlayer) {
+        ap = aplayerElement.APlayer;
+        
+        // Now that we have the instance, attach our event listeners
+        const playIcon = '<path fill="currentColor" d="M8 5.14v14l11-7L8 5.14Z"/>';
+        const pauseIcon = '<path fill="currentColor" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55a4 4 0 1 0 4 4V7h4V3h-6Z"/>';
+        const musicIcon = toggleBtn.querySelector('.music-icon');
+
+        ap.on('play', () => {
+          musicCapsule.classList.add('playing');
+          if (musicIcon) musicIcon.innerHTML = playIcon;
+        });
+
+        ap.on('pause', () => {
+          musicCapsule.classList.remove('playing');
+          if (musicIcon) musicIcon.innerHTML = pauseIcon;
+        });
+        
+        ap.on('ended', () => {
+          musicCapsule.classList.remove('playing');
+          if (musicIcon) musicIcon.innerHTML = pauseIcon;
+        });
+
+        // Make the player instance accessible for debugging
+        window.musicPlayer = ap;
+      } else {
+        // If not found, try again shortly
+        setTimeout(hookIntoAPlayer, 100);
+      }
+    };
+
+    // Start the process
+    hookIntoAPlayer();
+  });
+</script>
